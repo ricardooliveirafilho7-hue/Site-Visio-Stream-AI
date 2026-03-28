@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Atria Ops Local MVP</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="bg-orb orb-a"></div>
+  <div class="bg-orb orb-b"></div>
+
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">AO</div>
+        <div>
+          <p class="eyebrow">Operational AI</p>
+          <h1>Atria Ops</h1>
+        </div>
+      </div>
+
+      <div class="role-switcher">
+        <p class="section-label">Perfil da resposta</p>
+        <div class="segmented" id="role-switcher">
+          <button data-role="admin">Admin</button>
+          <button data-role="manager">Gestor</button>
+          <button class="is-active" data-role="employee">Funcionario novo</button>
+        </div>
+      </div>
+
+      <nav class="nav-list">
+        <button class="nav-item is-active" data-view="overview">
+          <span>Visao geral</span>
+          <small>status do workspace local</small>
+        </button>
+        <button class="nav-item" data-view="knowledge">
+          <span>Documentos</span>
+          <small>upload e base local</small>
+        </button>
+        <button class="nav-item" data-view="copilot">
+          <span>Copiloto</span>
+          <small>chat para o funcionario</small>
+        </button>
+        <button class="nav-item" data-view="admin">
+          <span>Admin</span>
+          <small>feedback e revisao</small>
+        </button>
+      </nav>
+
+      <div class="sidebar-note">
+        <p class="section-label">Observacao</p>
+        <p>Este MVP roda localmente no navegador. A chave OpenAI fica salva apenas no seu navegador para testes. Nao use esse modelo no browser em producao.</p>
+      </div>
+    </aside>
+
+    <main class="workspace">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">MVP local funcional</p>
+          <h2>Copiloto de onboarding e execucao com documentos reais</h2>
+        </div>
+        <div class="topbar-actions">
+          <button class="pill button-pill" id="open-settings-button">Configurar API</button>
+          <button class="pill button-pill danger" id="reset-workspace-button">Zerar workspace</button>
+        </div>
+      </header>
+
+      <section class="panel is-active" data-panel="overview">
+        <div class="hero-card">
+          <div>
+            <p class="eyebrow">Status atual</p>
+            <h3 id="hero-summary-title">Workspace vazio, pronto para configurar</h3>
+            <p id="hero-summary-body">Conecte sua chave OpenAI, envie PDFs da empresa e use o copiloto para explicar o trabalho ao funcionario novo com base apenas nos arquivos carregados.</p>
+          </div>
+          <div class="hero-metrics">
+            <div>
+              <span>Documentos carregados</span>
+              <strong id="metric-documents">0</strong>
+            </div>
+            <div>
+              <span>Chunks prontos para busca</span>
+              <strong id="metric-chunks">0</strong>
+            </div>
+            <div>
+              <span>Perguntas feitas</span>
+              <strong id="metric-questions">0</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="metrics-grid">
+          <article class="metric-card accent-sand">
+            <p>Helpful rate</p>
+            <strong id="metric-helpful">0%</strong>
+            <span id="metric-helpful-caption">Nenhum feedback ainda</span>
+          </article>
+          <article class="metric-card accent-blue">
+            <p>Ultimo processamento</p>
+            <strong id="metric-last-upload">-</strong>
+            <span id="metric-last-upload-caption">Nenhum arquivo enviado</span>
+          </article>
+          <article class="metric-card accent-red">
+            <p>Itens em revisao</p>
+            <strong id="metric-review">0</strong>
+            <span id="metric-review-caption">Feedback negativo gera fila local</span>
+          </article>
+          <article class="metric-card accent-green">
+            <p>Modo de resposta</p>
+            <strong id="metric-mode">Executar</strong>
+            <span id="metric-mode-caption">Ajuste no copiloto</span>
+          </article>
+        </div>
+
+        <div class="content-grid two-up">
+          <article class="glass-card">
+            <div class="card-head">
+              <div>
+                <p class="eyebrow">Passos para funcionar</p>
+                <h3>Setup minimo</h3>
+              </div>
+            </div>
+            <div class="feature-stack">
+              <div class="feature-row">
+                <strong>1. Configure a chave OpenAI</strong>
+                <p>Use o botao "Configurar API" e informe a chave para chamadas de chat.</p>
+              </div>
+              <div class="feature-row">
+                <strong>2. Envie documentos reais</strong>
+                <p>O MVP aceita PDF, TXT e MD. Cada arquivo vira chunks locais para recuperacao.</p>
+              </div>
+              <div class="feature-row">
+                <strong>3. Pergunte como funcionario</strong>
+                <p>O chat responde em linguagem simples e cita as fontes usadas.</p>
+              </div>
+            </div>
+          </article>
+
+          <article class="glass-card">
+            <div class="card-head">
+              <div>
+                <p class="eyebrow">Regras do MVP</p>
+                <h3>Como ele responde</h3>
+              </div>
+            </div>
+            <div class="feature-stack">
+              <div class="feature-row">
+                <strong>Apenas com base no que voce enviou</strong>
+                <p>Se faltar base nos documentos, o copiloto admite a limitacao.</p>
+              </div>
+              <div class="feature-row">
+                <strong>Contexto por perfil</strong>
+                <p>Admin, gestor e funcionario recebem explicacoes em tons diferentes.</p>
+              </div>
+              <div class="feature-row">
+                <strong>Resposta operacional</strong>
+                <p>O formato prioriza resposta direta, passo a passo, escalonamento e fontes.</p>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel" data-panel="knowledge">
+        <div class="content-grid two-up">
+          <article class="glass-card">
+            <div class="card-head">
+              <div>
+                <p class="eyebrow">Base de conhecimento local</p>
+                <h3>Upload de documentos</h3>
+              </div>
+              <span class="pill" id="upload-counter-pill">0 arquivos</span>
+            </div>
+
+            <div class="upload-zone">
+              <p>Envie PDFs, arquivos TXT ou MD. O processamento acontece no navegador.</p>
+              <div class="upload-actions">
+                <button class="cta-button" id="pick-files-button">Adicionar arquivos</button>
+                <input class="hidden-input" id="file-input" type="file" accept=".pdf,.txt,.md" multiple>
+              </div>
+              <p class="helper-text" id="upload-status">Nenhum processamento em andamento.</p>
+            </div>
+
+            <div class="doc-list empty" id="doc-list">
+              <div class="empty-state">
+                <strong>Nenhum documento carregado</strong>
+                <p>Quando voce enviar um arquivo, ele aparecera aqui com quantidade de chunks e data do processamento.</p>
+              </div>
+            </div>
+          </article>
+
+          <article class="glass-card">
+            <div class="card-head">
+              <div>
+                <p class="eyebrow">Chave OpenAI</p>
+                <h3>Configuracao local</h3>
+              </div>
+            </div>
+
+            <form class="settings-form" id="settings-form">
+              <label class="field">
+                <span>API key</span>
+                <input id="api-key-input" type="password" placeholder="sk-..." autocomplete="off">
+              </label>
+              <label class="field">
+                <span>Modelo</span>
+                <select id="model-select">
+                  <option value="gpt-4.1-mini">gpt-4.1-mini</option>
+                  <option value="gpt-5-mini">gpt-5-mini</option>
+                </select>
+              </label>
+              <button class="cta-button" type="submit">Salvar configuracao</button>
+              <p class="helper-text" id="settings-status">A chave fica salva no navegador deste computador.</p>
+            </form>
+
+            <div class="feature-stack compact">
+              <div class="feature-row">
+                <strong>Prototipo local</strong>
+                <p>Para teste rapido, a chave vai direto do browser para a API da OpenAI.</p>
+              </div>
+              <div class="feature-row">
+                <strong>Producao deve usar backend</strong>
+                <p>Em um produto real, a chave precisa ficar protegida no servidor.</p>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel" data-panel="copilot">
+        <div class="content-grid chat-layout">
+          <article class="glass-card chat-card">
+            <div class="card-head">
+              <div>
+                <p class="eyebrow">Copiloto operacional</p>
+                <h3 id="chat-title">Modo executar</h3>
+              </div>
+              <div class="segmented mode-switcher" id="mode-switcher">
+                <button data-mode="learn">Aprender</button>
+                <button class="is-active" data-mode="execute">Executar</button>
+                <button data-mode="policy">Politica</button>
+              </div>
+            </div>
+
+            <div class="chat-thread empty" id="chat-thread">
+              <div class="empty-state">
+                <strong>O chat ainda nao tem conversa</strong>
+                <p>Carregue documentos e faca a primeira pergunta para o funcionario novo.</p>
+              </div>
+            </div>
+
+            <form class="chat-composer" id="chat-form">
+              <textarea id="chat-input" rows="4" placeholder="Ex.: Como devo tratar um cancelamento com pedido de reembolso?"></textarea>
+              <div class="composer-actions">
+                <div class="helper-text" id="chat-status">Pronto para receber sua base de conhecimento.</div>
+                <button class="cta-button" id="send-button" type="submit">Perguntar</button>
+              </div>
+            </form>
+          </article>
+
+          <article class="glass-card side-card">
+            <div class="card-head">
+              <div>
+                <p class="eyebrow">Como a resposta e montada</p>
+                <h3>Pipeline local do MVP</h3>
+              </div>
+            </div>
+            <div class="feature-stack">
+              <div class="feature-row">
+                <strong>1. Recupera trechos relevantes</strong>
+                <p>O navegador escolhe os chunks mais proximos da pergunta.</p>
+              </div>
+              <div class="feature-row">
+                <strong>2. Envia contexto para a OpenAI</strong>
+                <p>A pergunta e os trechos mais relevantes viram o prompt do copiloto.</p>
+              </div>
+              <div class="feature-row">
+                <strong>3. Responde para o funcionario</strong>
+                <p>O modelo devolve explicacao simples, passo a passo e fontes.</p>
+              </div>
+              <div class="feature-row">
+                <strong>4. Coleta feedback</strong>
+                <p>Voce marca se ajudou ou nao e o painel admin mostra a fila local.</p>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel" data-panel="admin">
+        <div class="content-grid two-up">
+          <article class="glass-card">
+            <div class="card-head">
+              <div>
+                <p class="eyebrow">Feedback coletado</p>
+                <h3>Ultimas respostas avaliadas</h3>
+              </div>
+            </div>
+            <div class="review-list empty" id="feedback-list">
+              <div class="empty-state">
+                <strong>Nenhum feedback ainda</strong>
+                <p>Depois de usar o chat, marque se a resposta ajudou ou nao ajudou.</p>
+              </div>
+            </div>
+          </article>
+
+          <article class="glass-card">
+            <div class="card-head">
+              <div>
+                <p class="eyebrow">Fila de revisao</p>
+                <h3>Pontos que precisam de melhoria</h3>
+              </div>
+            </div>
+            <div class="review-list empty" id="review-list">
+              <div class="empty-state">
+                <strong>Nada em revisao</strong>
+                <p>Feedback negativo e respostas sem base suficiente aparecerao aqui.</p>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <dialog class="settings-dialog" id="settings-dialog">
+    <form class="dialog-card" method="dialog">
+      <div class="card-head">
+        <div>
+          <p class="eyebrow">Configuracao rapida</p>
+          <h3>Conectar OpenAI</h3>
+        </div>
+      </div>
+      <p class="dialog-copy">Informe sua chave e salve. Esta configuracao fica apenas no navegador local deste MVP.</p>
+      <label class="field">
+        <span>API key</span>
+        <input id="dialog-api-key-input" type="password" placeholder="sk-..." autocomplete="off">
+      </label>
+      <label class="field">
+        <span>Modelo</span>
+        <select id="dialog-model-select">
+          <option value="gpt-4.1-mini">gpt-4.1-mini</option>
+          <option value="gpt-5-mini">gpt-5-mini</option>
+        </select>
+      </label>
+      <div class="dialog-actions">
+        <button class="pill button-pill" type="button" id="close-settings-dialog">Fechar</button>
+        <button class="cta-button" type="button" id="save-dialog-settings">Salvar</button>
+      </div>
+      <p class="helper-text" id="dialog-settings-status"></p>
+    </form>
+  </dialog>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
